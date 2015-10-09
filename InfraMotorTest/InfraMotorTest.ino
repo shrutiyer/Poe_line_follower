@@ -17,11 +17,13 @@ Adafruit_DCMotor *myMotor2 = AFMS.getMotor(4);
 int infraVal1; //Value from infrared sensor 1
 int infraVal2; //Value from infrared sensor 2
 
+//int Motor1 = 100 //Right motor speed
+
 void setup() {
   // put your setup code here, to run once:
   AFMS.begin();
-  myMotor1->setSpeed(100);
-  myMotor2->setSpeed(100);
+  myMotor1->setSpeed(10);
+  myMotor2->setSpeed(10);
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -32,6 +34,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   infraVal1 = analogRead(A0);
   infraVal2 = analogRead(A1);
-  myMotor1->run(FORWARD);
-  myMotor2->run(FORWARD);
+
+  if (infraVal1>infraVal2 && infraVal1-infraVal2>=700) {
+    myMotor1->run(FORWARD);
+  }else if (infraVal2>infraVal1 && infraVal2-infraVal1>=700) {
+    myMotor2->run(FORWARD);
+    }
 }
