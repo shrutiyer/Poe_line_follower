@@ -20,8 +20,8 @@ int leftIR; //Value from infrared sensor 2
 
 void setup() {
   AFMS.begin();
-  rightMotor->setSpeed(10);
-  leftMotor->setSpeed(10);
+  rightMotor->setSpeed(20);
+  leftMotor->setSpeed(20);
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -29,19 +29,26 @@ void setup() {
 }
 
 void loop() {
-  rightIR_val = analogRead(A0);
-  rightIR_val = analogRead(A1);
+  leftIR = analogRead(A0);
+  rightIR = analogRead(A1);
+  
+  Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" ");
 
-  if (rightIR_val > leftIR_val && rightIR_val >= 700) {
-    leftMotor->run(FORWARD);
-  }
-
-  if (leftIR_val > rightIR_val && leftIR_val >= 700) {
-    rightMotor->run(FORWARD)
-  }
-
-  if (leftIR_val < 700 && rightIR_val < 700) {
+  if (rightIR > leftIR && rightIR - leftIR >= 500) {
+    leftMotor->run(BACKWARD);
     rightMotor->run(FORWARD);
+    Serial.println("Turn right.");
+  }
+
+  else if (leftIR > rightIR && leftIR - rightIR >= 500) {
+    rightMotor->run(BACKWARD);
     leftMotor->run(FORWARD);
+    Serial.println("Turn left.");
+  }
+  
+  else if (leftIR - rightIR <= 100 || rightIR - leftIR <= 100) {
+    rightMotor->run(BACKWARD);
+    leftMotor->run(BACKWARD);
+    Serial.println("Go straight.");
   }
 }
