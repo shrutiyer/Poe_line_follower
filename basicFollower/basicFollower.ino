@@ -34,13 +34,13 @@ void loop() {
   
   Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" ");
 
-  if (rightIR > leftIR && rightIR - leftIR >= 200) {
+  if (rightIR > leftIR && rightIR - leftIR >= 100) {
     leftMotor->run(BACKWARD);
     rightMotor->run(FORWARD);
     Serial.println("Turn right.");
   }
 
-  else if (leftIR > rightIR && leftIR - rightIR >= 200) {
+  else if (leftIR > rightIR && leftIR - rightIR >= 100) {
     rightMotor->run(BACKWARD);
     leftMotor->run(FORWARD);
     Serial.println("Turn left.");
