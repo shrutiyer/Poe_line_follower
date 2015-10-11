@@ -18,10 +18,13 @@ Adafruit_DCMotor *leftMotor = AFMS.getMotor(4);
 int rightIR; //Value from infrared sensor 1
 int leftIR; //Value from infrared sensor 2
 
+const int rightMotorSpeed = 30;
+const int leftMotorSpeed = 30;
+
 void setup() {
   AFMS.begin();
-  rightMotor->setSpeed(30);
-  leftMotor->setSpeed(30);
+  rightMotor->setSpeed(rightMotorSpeed);
+  leftMotor->setSpeed(leftMotorSpeed);
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
@@ -32,23 +35,24 @@ void loop() {
   leftIR = analogRead(A0);
   rightIR = analogRead(A1);
   
-  Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" ");
-
   if (rightIR > leftIR && rightIR - leftIR >= 100) {
     leftMotor->run(BACKWARD);
     rightMotor->run(FORWARD);
-    Serial.println("Turn right.");
+    Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" "); 
+    Serial.print(leftMotorSpeed); Serial.print(" "); Serial.println(-rightMotorSpeed);
   }
 
   else if (leftIR > rightIR && leftIR - rightIR >= 100) {
     rightMotor->run(BACKWARD);
     leftMotor->run(FORWARD);
-    Serial.println("Turn left.");
+    Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" "); 
+    Serial.print(-leftMotorSpeed); Serial.print(" "); Serial.println(rightMotorSpeed);
   }
   
   else if (leftIR - rightIR <= 100 || rightIR - leftIR <= 100) {
     rightMotor->run(BACKWARD);
     leftMotor->run(BACKWARD);
-    Serial.println("Go straight.");
+    Serial.print(leftIR); Serial.print(" "); Serial.print(rightIR); Serial.print(" "); 
+    Serial.print(leftMotorSpeed); Serial.print(" "); Serial.println(rightMotorSpeed);
   }
 }
