@@ -18,17 +18,25 @@ Adafruit_DCMotor *leftMotor = AFMS.getMotor(4);
 int rightIR; //Value from infrared sensor 1
 int leftIR; //Value from infrared sensor 2
 
+byte updateSpeed = 0; //For changing speeds
+
+byte rightSpeed = 30; //Setting speed for right and left
+byte leftSpeed = 30;
+
 void setup() {
   AFMS.begin();
-  rightMotor->setSpeed(30);
-  leftMotor->setSpeed(30);
+  rightMotor->setSpeed(rightSpeed);
+  leftMotor->setSpeed(leftSpeed);
 
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
   Serial.begin(9600);
 }
 
-void loop() {
+void loop(){
+  
+  updateSpeed();
+  
   leftIR = analogRead(A0);
   rightIR = analogRead(A1);
   
@@ -52,3 +60,12 @@ void loop() {
     Serial.println("Go straight.");
   }
 }
+
+void updateSpeed() {
+  if (Serial.available() > 0){
+    updateSpeed = Serial.read();
+    rightMotor->setSpeed(updateSpeed);
+    leftMotor->setSpeed(updateSpeed);
+}
+
+
